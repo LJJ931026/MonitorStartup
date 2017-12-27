@@ -61,6 +61,9 @@
       <height>23</height>
      </rect>
     </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
+    </property>
     <property name="text">
      <string>开始监控</string>
     </property>

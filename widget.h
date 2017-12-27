@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QSystemTrayIcon>
+#include <QMenu>
+#include <QAction>
 #include "monitorsaftware.h"
 
 namespace Ui {
@@ -34,12 +36,22 @@ private slots:
 
     void closeEvent(QCloseEvent *e);
 
+    void ActivateSystemTray(QSystemTrayIcon::ActivationReason reason);
+
+    void MainInterface();
+
+    void ExitProgram();
+
 private:
     Ui::Widget *ui;
     MonitorSaftware mthread;
     QSystemTrayIcon mSysTrayIcon;
+    QMenu *menu;
+    QAction *MainFace;
+    QAction *Exit;
 
     void MiniTray();
+    void CreateMenu();
 };
 
 #endif // WIDGET_H

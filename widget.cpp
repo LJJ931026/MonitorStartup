@@ -7,11 +7,12 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->pushButton_monitor->setFocus();
+    ui->pushButton_monitor->setDefault(true);
+
     connect(&mthread, SIGNAL(sendMsg(QString)), this, SLOT(ReceiveMsg(QString)));
     connect(this, SIGNAL(sendMsg(QString)), &mthread, SLOT(ReceiveMsg(QString)));
 
-//    mSysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
-//    mt.start();
 }
 
 Widget::~Widget()
@@ -81,7 +82,6 @@ void Widget::closeEvent(QCloseEvent *e)
     if(QMessageBox::information(NULL, QString("提示"), QString("是否最小化托盘?\n\n选择是最小化托盘，选择否退出"),
                     QMessageBox::Ok | QMessageBox::No) == QMessageBox::Ok) {
         e->ignore();
-        qDebug() << "最小化托盘";
         MiniTray();
     }
     else {
@@ -97,7 +97,49 @@ void Widget::MiniTray()
     mSysTrayIcon.setIcon(icon); //将icon设到QSystemTrayIcon对象中
     mSysTrayIcon.setToolTip("检测软件启动"); //当鼠标移动到托盘上的图标时，会显示此处设置的内容
     mSysTrayIcon.show(); //在系统托盘显示此对象
-    mSysTrayIcon.showMessage("提示", "双击显示界面");
+    mSysTrayIcon.showMessage("提示", "点击显示界面");
+    CreateMenu(); // 创建菜单
+
+    connect(&mSysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(ActivateSystemTray(QSystemTrayIcon::ActivationReason)));
+}
+
+void Widget::ActivateSystemTray(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason) {
+    case QSystemTrayIcon::Trigger:
+        this->show();
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        this->show();
+        break;
+    default:
+        break;
+    }
+}
+
+void Widget::CreateMenu()
+{
+    MainFace = new QAction("主界面", this);
+    connect(MainFace, SIGNAL(triggered()), this, SLOT(MainInterface()));
+
+    Exit = new QAction("退出", this);
+    connect(Exit, SIGNAL(triggered()), this, SLOT(ExitProgram()));
+
+    menu = new QMenu(this);
+    menu->addAction(MainFace);
+    menu->addAction(Exit);
+    mSysTrayIcon.setContextMenu(menu);
+}
+
+void Widget::MainInterface()
+{
+    this->show();
+}
+
+void Widget::ExitProgram()
+{
+    this->close();
 }
 
 
