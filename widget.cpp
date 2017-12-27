@@ -9,6 +9,8 @@ Widget::Widget(QWidget *parent) :
 
     connect(&mthread, SIGNAL(sendMsg(QString)), this, SLOT(ReceiveMsg(QString)));
     connect(this, SIGNAL(sendMsg(QString)), &mthread, SLOT(ReceiveMsg(QString)));
+
+//    mSysTrayIcon = new QSystemTrayIcon(this); //新建QSystemTrayIcon对象
 //    mt.start();
 }
 
@@ -73,3 +75,31 @@ void Widget::ReceiveMsg(QString msg)
 {
     ui->textEdit_info->append(msg);
 }
+
+void Widget::closeEvent(QCloseEvent *e)
+{
+    if(QMessageBox::information(NULL, QString("提示"), QString("是否最小化托盘?\n\n选择是最小化托盘，选择否退出"),
+                    QMessageBox::Ok | QMessageBox::No) == QMessageBox::Ok) {
+        e->ignore();
+        qDebug() << "最小化托盘";
+        MiniTray();
+    }
+    else {
+        e->accept();
+    }
+}
+
+void Widget::MiniTray()
+{
+    this->hide();
+
+    QIcon icon = QIcon(":/icon/Monitor.png");
+    mSysTrayIcon.setIcon(icon); //将icon设到QSystemTrayIcon对象中
+    mSysTrayIcon.setToolTip("检测软件启动"); //当鼠标移动到托盘上的图标时，会显示此处设置的内容
+    mSysTrayIcon.show(); //在系统托盘显示此对象
+    mSysTrayIcon.showMessage("提示", "双击显示界面");
+}
+
+
+
+

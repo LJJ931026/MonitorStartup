@@ -32,8 +32,6 @@ void MonitorSaftware::run()
          * 注：这个需要在线程中实现,不能在注进程中写
          */
         QString str = QString("第%1次检测").arg(cnt);
-//        PathName = "D:/Anke - LJJ/Project/微震联合定位/采集软件/UnionSample/UnionSample/Release/UnionSample.exe";
-//        QString PathName = "cmd.exe";
         if(PathName == "") continue;
         if(!PathName.contains(".exe")) continue;
         if(Name == "") continue;
@@ -44,7 +42,6 @@ void MonitorSaftware::run()
         StartSW.start(cmd, arg);
         StartSW.waitForFinished();
         QString info = QString::fromLocal8Bit(StartSW.readAllStandardOutput());
-        qDebug() << "---" << info << "---";
         if(info.contains("没有运行的任务匹配指定标准")){
             StartSW.startDetached(PathName, QStringList(PathName));
             emit sendMsg(str + ", 没有见到程序运行，正在开启程序...");

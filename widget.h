@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCloseEvent>
+#include <QSystemTrayIcon>
 #include "monitorsaftware.h"
 
 namespace Ui {
@@ -30,9 +32,14 @@ private slots:
 
     void ReceiveMsg(QString msg);
 
+    void closeEvent(QCloseEvent *e);
+
 private:
     Ui::Widget *ui;
     MonitorSaftware mthread;
+    QSystemTrayIcon mSysTrayIcon;
+
+    void MiniTray();
 };
 
 #endif // WIDGET_H
