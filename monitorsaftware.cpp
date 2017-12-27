@@ -15,7 +15,8 @@ void MonitorSaftware::run()
     QStringList pn = PathName.split("/");
     foreach (QString tmp, pn) {
         if(!tmp.contains(".exe")) continue;
-        Name = tmp;
+        Name += tmp;
+        break;
     }
     msleep(3000);
     while (1)
@@ -39,7 +40,7 @@ void MonitorSaftware::run()
         if(!Name.contains(".exe")) continue;
         QString cmd = "tasklist";
         QStringList arg;
-        arg << "-fi" << "imagename eq UnionSample.exe";
+        arg << "-fi" << Name;
         StartSW.start(cmd, arg);
         StartSW.waitForFinished();
         QString info = QString::fromLocal8Bit(StartSW.readAllStandardOutput());
