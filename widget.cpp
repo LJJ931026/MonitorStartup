@@ -74,6 +74,9 @@ void Widget::on_lineEdit_editingFinished()
 
 void Widget::ReceiveMsg(QString msg)
 {
+    QTextDocument *doc = ui->textEdit_info->document();
+    if(doc->lineCount() > 9999)
+        ui->textEdit_info->clear();
     ui->textEdit_info->append(msg);
 }
 
