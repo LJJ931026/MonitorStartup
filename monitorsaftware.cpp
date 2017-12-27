@@ -54,6 +54,10 @@ void MonitorSaftware::run()
         if(isExit)
             break;
         msleep(5000);
+        if(cnt > 999999999) {
+            emit sendMsg("计数器清零");
+            cnt = 0;
+        }
         cnt++;
     }
 }
