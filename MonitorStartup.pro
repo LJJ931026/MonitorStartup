@@ -23,3 +23,4 @@ FORMS    += widget.ui
 
 RESOURCES += \
     source.qrc
+

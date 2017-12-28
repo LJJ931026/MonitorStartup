@@ -88,6 +88,10 @@ void Widget::closeEvent(QCloseEvent *e)
         MiniTray();
     }
     else {
+        emit sendMsg("exit");
+        mthread.wait(5000);
+        mthread.quit();
+
         e->accept();
     }
 }

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/icon">
         <file>Monitor.png</file>
+        <file>Monitor.ico</file>
     </qresource>
 </RCC>
