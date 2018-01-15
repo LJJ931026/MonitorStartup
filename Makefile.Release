@@ -110,8 +110,8 @@ compiler_rcc_make_all: release/qrc_source.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_source.cpp
 release/qrc_source.cpp: source.qrc \
-		Monitor.png \
-		Monitor.ico
+		Monitor.ico \
+		Monitor.png
 	D:\software\QT\5.2.0\mingw48_32\bin\rcc.exe -name source source.qrc -o release\qrc_source.cpp
 
 compiler_moc_header_make_all: release/moc_widget.cpp release/moc_monitorsaftware.cpp
