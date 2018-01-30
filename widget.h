@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <QTextDocument>
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QSystemTrayIcon>

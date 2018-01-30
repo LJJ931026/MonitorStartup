@@ -6,11 +6,15 @@ MonitorSaftware::MonitorSaftware(QObject *parent) :
     isExit = false;
 
     Name = "imagename eq ";
+
 }
 
 void MonitorSaftware::run()
 {
     static long cnt = 0;
+    QString str, info;
+    QString cmd = "tasklist";
+    QStringList arg;
     QProcess StartSW(this);
     QStringList pn = PathName.split("/");
     foreach (QString tmp, pn) {
@@ -31,17 +35,16 @@ void MonitorSaftware::run()
          * 注：建议使用路径方式(获取是否运行信息时只能使用这种方式):"D:/Anke - LJJ/Project/微震联合定位/采集软件/UnionSample/UnionSample/Release/UnionSample.exe";
          * 注：这个需要在线程中实现,不能在注进程中写
          */
-        QString str = QString("第%1次检测").arg(cnt);
+        if(isExit) break;
+        str = QString("第%1次检测").arg(cnt);
         if(PathName == "") continue;
         if(!PathName.contains(".exe")) continue;
         if(Name == "") continue;
         if(!Name.contains(".exe")) continue;
-        QString cmd = "tasklist";
-        QStringList arg;
         arg << "-fi" << Name;
         StartSW.start(cmd, arg);
         StartSW.waitForFinished();
-        QString info = QString::fromLocal8Bit(StartSW.readAllStandardOutput());
+        info = QString::fromLocal8Bit(StartSW.readAllStandardOutput());
         if(info.contains("没有运行的任务匹配指定标准")){
             StartSW.startDetached(PathName, QStringList(PathName));
             emit sendMsg(str + ", 没有见到程序运行，正在开启程序...");
@@ -51,8 +54,6 @@ void MonitorSaftware::run()
             emit sendMsg(str + ", 程序已经在运行...");
         }
 
-        if(isExit)
-            break;
         msleep(5000);
         if(cnt > 99999) {
             emit sendMsg("计数器清零");

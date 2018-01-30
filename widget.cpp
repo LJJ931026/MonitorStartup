@@ -7,6 +7,7 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     ui->pushButton_monitor->setFocus();
     ui->pushButton_monitor->setDefault(true);
 
@@ -74,8 +75,10 @@ void Widget::on_lineEdit_editingFinished()
 
 void Widget::ReceiveMsg(QString msg)
 {
-    QTextDocument *doc = ui->textEdit_info->document();
-    if(doc->lineCount() > 9999)
+//    QTextDocument *doc = ui->textEdit_info->document();
+//    if(doc->lineCount() > 9999)
+//        ui->textEdit_info->clear();
+    if(ui->textEdit_info->document()->lineCount() > 999)
         ui->textEdit_info->clear();
     ui->textEdit_info->append(msg);
 }
