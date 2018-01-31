@@ -13,6 +13,10 @@ Widget::Widget(QWidget *parent) :
 
     connect(&mthread, SIGNAL(sendMsg(QString)), this, SLOT(ReceiveMsg(QString)));
     connect(this, SIGNAL(sendMsg(QString)), &mthread, SLOT(ReceiveMsg(QString)));
+    connect(&mSysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), // 最小化托盘
+            this, SLOT(ActivateSystemTray(QSystemTrayIcon::ActivationReason)));
+
+    CreateMenu(); // 创建菜单
 
 }
 
@@ -107,21 +111,23 @@ void Widget::MiniTray()
     mSysTrayIcon.setIcon(icon); //将icon设到QSystemTrayIcon对象中
     mSysTrayIcon.setToolTip("检测软件启动"); //当鼠标移动到托盘上的图标时，会显示此处设置的内容
     mSysTrayIcon.show(); //在系统托盘显示此对象
-    mSysTrayIcon.showMessage("提示", "点击显示界面");
-    CreateMenu(); // 创建菜单
-
-    connect(&mSysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(ActivateSystemTray(QSystemTrayIcon::ActivationReason)));
+    mSysTrayIcon.showMessage("提示", "单击或双击显示界面");
 }
 
 void Widget::ActivateSystemTray(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason) {
     case QSystemTrayIcon::Trigger:
+    {
+        mSysTrayIcon.hide();
         this->show();
+    }
         break;
     case QSystemTrayIcon::DoubleClick:
+    {
+        mSysTrayIcon.hide();
         this->show();
+    }
         break;
     default:
         break;
@@ -145,6 +151,7 @@ void Widget::CreateMenu()
 void Widget::MainInterface()
 {
     this->show();
+    mSysTrayIcon.hide();
 }
 
 void Widget::ExitProgram()

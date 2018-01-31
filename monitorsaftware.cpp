@@ -22,6 +22,11 @@ void MonitorSaftware::run()
         Name += tmp;
         break;
     }
+    pn.clear();  // 使用后清除
+    if(PathName == "") return;
+    if(!PathName.contains(".exe")) return;
+    if(Name == "") return;
+    if(!Name.contains(".exe")) return;
     msleep(3000);
     while (1)
     {
@@ -37,10 +42,6 @@ void MonitorSaftware::run()
          */
         if(isExit) break;
         str = QString("第%1次检测").arg(cnt);
-        if(PathName == "") continue;
-        if(!PathName.contains(".exe")) continue;
-        if(Name == "") continue;
-        if(!Name.contains(".exe")) continue;
         arg << "-fi" << Name;
         StartSW.start(cmd, arg);
         StartSW.waitForFinished();
@@ -50,7 +51,7 @@ void MonitorSaftware::run()
             emit sendMsg(str + ", 没有见到程序运行，正在开启程序...");
         }
         else {
-            qDebug() << "程序已经在运行！";
+//            qDebug() << "程序已经在运行！";
             emit sendMsg(str + ", 程序已经在运行...");
         }
 
@@ -60,6 +61,8 @@ void MonitorSaftware::run()
             cnt = 0;
         }
         cnt++;
+        arg.clear(); // 清除参数
+        StartSW.close();  // 不加会引起内存泄漏
     }
 }
 
